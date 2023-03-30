@@ -91,7 +91,7 @@ jobs:
           aws configure set aws_access_key_id $AWS_AK_VALUE
           aws configure set aws_secret_access_key $AWS_SK_VALUE
           aws configure set region $AWS_REG_VALUE
-          aws s3 ls
+        # aws s3 ls
          
       # Verifying installed Docker version
       - name: Verifying installed Docker version
