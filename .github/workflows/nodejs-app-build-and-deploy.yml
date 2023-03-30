@@ -51,8 +51,8 @@ on:
   push:
     branches:
       - main
-    #paths:
-     # - src/**
+    paths:
+      - src/**
   pull_request:
 
 jobs:
@@ -112,7 +112,7 @@ jobs:
           AWS_REG_VALUE: ${{ secrets.AWS_REGION }}
           APP_PORT_NUMBER : ${{ secrets.APP_PORT_NUMBER }}
         run: |
-          docker login -u AWS -p $(aws ecr get-login-password --region $AWS_REG_VALUE) $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REG_VALUE.amazonaws.com
+          aws ecr get-login-password --region $AWS_REG_VALUE | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REG_VALUE.amazonaws.com
           echo commit id: $GITHUB_SHA
           docker build --build-arg APP_PORT=$APP_PORT_NUMBER -t $AWS_PRIVATE_ECR_REPO_NAME:$GITHUB_SHA .
           docker tag $AWS_PRIVATE_ECR_REPO_NAME:$GITHUB_SHA $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REG_VALUE.amazonaws.com/$AWS_PRIVATE_ECR_REPO_NAME:$GITHUB_SHA
