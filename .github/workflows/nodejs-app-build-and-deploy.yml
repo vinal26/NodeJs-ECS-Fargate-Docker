@@ -102,7 +102,7 @@ jobs:
       # AWS ECR Login, Build and Push the app Docker img
       - name: CI Steps
         if: always()
-        continue-on-error: true
+        continue-on-error: ture
         working-directory: ./src
         env:
           AWS_PRIVATE_ECR_REPO_NAME: ${{ secrets.AWS_PRIVATE_ECR_REPO_NAME }}
@@ -110,6 +110,7 @@ jobs:
           AWS_REG_VALUE: ${{ secrets.AWS_REGION }}
           APP_PORT_NUMBER : ${{ secrets.APP_PORT_NUMBER }}
         run: |
+          aws ecr get-login-password --region $AWS_REG_VALUE | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REG_VALUE.amazonaws.com
           aws ecr get-login-password --region $AWS_REG_VALUE | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REG_VALUE.amazonaws.com
           echo commit id: $GITHUB_SHA
           docker build --build-arg APP_PORT=$APP_PORT_NUMBER -t $AWS_PRIVATE_ECR_REPO_NAME:$GITHUB_SHA .
